@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake Social Media Account Detection</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        
+        #logo {
+            position: absolute;
+            top: 80px;
+            left: 150px;
+            width: 100px; 
+            height: auto;
+        }
+
+        body {
+            margin-top: 60px; 
+        }
+    </style>
+</head>
+<body>
+  
+    <img id="logo" src="{{ url_for('static', filename='images/images.jpg') }}" alt="Logo">
+    
+    <h1>Fake Social Media Account Detection</h1>
+    <form id="predictForm">
+        <label for="profile_pic">Profile Picture (1/0):</label>
+        <input type="number" id="profile_pic" placeholder="1 for profile pic, 0 for no pic" required><br><br>
+
+        <label for="username_length">Number of Digits in Username:</label>
+        <input type="number" id="username_length" placeholder="Number of digits in username" required><br><br>
+
+        <label for="fullname_words">Full Name Words (count of words):</label>
+        <input type="number" id="fullname_words" placeholder="Words in full name" required><br><br>
+
+        <label for="fullname_length">Full Name Length (character count):</label>
+        <input type="number" id="fullname_length" placeholder="Length of full name" required><br><br>
+
+        <label for="nums_length_fullname">Number of Digits in Full Name:</label>
+        <input type="number" id="nums_length_fullname" placeholder="Number of digits in full name" required><br><br>
+
+        <label for="description_length">Description Length (character count):</label>
+        <input type="number" id="description_length" placeholder="Description Length" required><br><br>
+
+        <label for="external_url">External URL (1/0):</label>
+        <input type="number" id="external_url" placeholder="1 if external URL exists, 0 if not" required><br><br>
+
+        <label for="private">Account Private (1/0):</label>
+        <input type="number" id="private" placeholder="1 if private, 0 if public" required><br><br>
+
+        <label for="posts">Number of Posts:</label>
+        <input type="number" id="posts" placeholder="Number of posts" required><br><br>
+
+        <label for="followers">Number of Followers:</label>
+        <input type="number" id="followers" placeholder="Number of followers" required><br><br>
+
+        <label for="follows">Number of Follows:</label>
+        <input type="number" id="follows" placeholder="Number of follows" required><br><br>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    <h3>Prediction Result: <span id="predictionResult"></span></h3>
+
+    <script>
+        $("#predictForm").on("submit", function(event) {
+            event.preventDefault();
+
+            var formData = {
+                'profile_pic': $("#profile_pic").val(),
+                'username_length': $("#username_length").val(),
+                'fullname_words': $("#fullname_words").val(),
+                'fullname_length': $("#fullname_length").val(),
+                'nums_length_fullname': $("#nums_length_fullname").val(),
+                'description_length': $("#description_length").val(),
+                'external_url': $("#external_url").val(),
+                'private': $("#private").val(),
+                'posts': $("#posts").val(),
+                'followers': $("#followers").val(),
+                'follows': $("#follows").val(),
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/predict",
+                contentType: "application/json",
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    $("#predictionResult").text(response.prediction);
+                },
+                error: function() {
+                    alert("Error in prediction.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

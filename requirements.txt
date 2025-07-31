@@ -1,0 +1,13 @@
+jupyter notebook
+
+flask
+
+pandas
+
+numpy
+
+scikit-learn
+
+tensorflow
+
+keras
